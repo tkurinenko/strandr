@@ -33,8 +33,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSave.setOnClickListener(this);
         btnLoad.setOnClickListener(this);
 
+        loadText();
 
+    }
 
+    @Override
+    protected void onDestroy() {
+        saveText();
+        super.onDestroy();
     }
 
     @Override
@@ -47,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSave:
+                //збереження даних
                 saveText();
                 break;
             case R.id.btnLoad:
@@ -57,16 +64,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
+    //збереження даних
     void saveText() {
-    sPref = getPreferences(MODE_PRIVATE);
+        //получаем объект sPref класса SharedPreferences, который позволяет работать с данными (читать и писать)
+    sPref = getSharedPreferences("SavedData",MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
         ed.putString(SAVED_TEXT, etText.getText().toString());
+        //щоб дані збереглись
         ed.apply();
         Toast.makeText(this,"Text saved", Toast.LENGTH_SHORT).show();
 
     }
-
+//загрузка данних за допомогою метода getString()
     void loadText() {
     sPref = getPreferences(MODE_PRIVATE);
         String savedText = sPref.getString(SAVED_TEXT, "");
