@@ -13,8 +13,8 @@ public class MainActivity extends AppCompatActivity {
 
     final String LOG_TAG = "myLogs";
 
-    final String DB_NAME = "staff";
-    final int DB_VERSION = 2;
+    final String DB_NAME = "staff"; // имя БД
+    final int DB_VERSION = 2; // версия БД
 
     /** Called when the activity is first created. */
     @Override
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         dbh.close();
     }
 
+    // запрос данных и вывод в лог
     private void writeStaff(SQLiteDatabase db) {
         Cursor c = db.rawQuery("select * from people", null);
         logCursor(c, "Table people");
@@ -66,27 +67,33 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, title + ". Cursor is null");
     }
 
+    // класс для работы с БД
     class DBHelper extends SQLiteOpenHelper {
 
         public DBHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);
-
         }
 
         public void onCreate(SQLiteDatabase db) {
             Log.d(LOG_TAG, " --- onCreate database --- ");
+
             String[] people_name = { "Иван", "Марья", "Петр", "Антон", "Даша",
                     "Борис", "Костя", "Игорь" };
             int[] people_posid = { 2, 3, 2, 2, 3, 1, 2, 4 };
+
+            // данные для таблицы должностей
             int[] position_id = { 1, 2, 3, 4 };
             String[] position_name = { "Директор", "Программер", "Бухгалтер",
                     "Охранник" };
             int[] position_salary = { 15000, 13000, 10000, 8000 };
+
             ContentValues cv = new ContentValues();
 
+            // создаем таблицу должностей
             db.execSQL("create table position (" + "id integer primary key,"
                     + "name text, salary integer" + ");");
 
+            // заполняем ее
             for (int i = 0; i < position_id.length; i++) {
                 cv.clear();
                 cv.put("id", position_id[i]);
@@ -95,10 +102,12 @@ public class MainActivity extends AppCompatActivity {
                 db.insert("position", null, cv);
             }
 
+            // создаем таблицу людей
             db.execSQL("create table people ("
                     + "id integer primary key autoincrement,"
                     + "name text, posid integer);");
 
+            // заполняем ее
             for (int i = 0; i < people_name.length; i++) {
                 cv.clear();
                 cv.put("name", people_name[i]);
@@ -111,10 +120,11 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, " --- onUpgrade database from " + oldVersion
                     + " to " + newVersion + " version --- ");
 
-            if (newVersion > oldVersion) {
+            if (oldVersion == 1 && newVersion == 2) {
 
                 ContentValues cv = new ContentValues();
 
+                // данные для таблицы должностей
                 int[] position_id = { 1, 2, 3, 4 };
                 String[] position_name = { "Директор", "Программер",
                         "Бухгалтер", "Охранник" };
@@ -122,10 +132,12 @@ public class MainActivity extends AppCompatActivity {
 
                 db.beginTransaction();
                 try {
+                    // создаем таблицу должностей
                     db.execSQL("create table position ("
                             + "id integer primary key,"
                             + "name text, salary integer);");
 
+                    // заполняем ее
                     for (int i = 0; i < position_id.length; i++) {
                         cv.clear();
                         cv.put("id", position_id[i]);
@@ -142,16 +154,20 @@ public class MainActivity extends AppCompatActivity {
                         db.update("people", cv, "position = ?",
                                 new String[] { position_name[i] });
                     }
+
                     db.execSQL("create temporary table people_tmp ("
                             + "id integer, name text, position text, posid integer);");
+
                     db.execSQL("insert into people_tmp select id, name, position, posid from people;");
                     db.execSQL("drop table people;");
 
                     db.execSQL("create table people ("
                             + "id integer primary key autoincrement,"
                             + "name text, posid integer);");
+
                     db.execSQL("insert into people select id, name, posid from people_tmp;");
                     db.execSQL("drop table people_tmp;");
+
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
