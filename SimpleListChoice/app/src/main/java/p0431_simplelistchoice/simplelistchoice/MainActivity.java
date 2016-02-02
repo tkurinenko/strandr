@@ -3,6 +3,7 @@ package p0431_simplelistchoice.simplelistchoice;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,8 +34,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Log.d(LOG_TAG, "checked: " + names[lvMain.getCheckedItemPosition()]);
+        Log.d(LOG_TAG, "checked: ");
 
-
+        SparseBooleanArray sbArray = lvMain.getCheckedItemPositions();
+        for (int i = 0; i < sbArray.size(); i++) {
+            int key = sbArray.keyAt(i);
+            if (sbArray.get(key)){
+                Log.d(LOG_TAG, names[key]);
+            }
+        }
     }
 }
