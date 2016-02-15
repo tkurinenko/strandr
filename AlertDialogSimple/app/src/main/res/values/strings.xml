@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AlertDialogSimple</string>
+    <string name="exit">Вихід</string>
+    <string name="save_data">Зберегти дані?</string>
+    <string name="yes">Так</string>
+    <string name="no">Ні</string>
+    <string name="cancel">Відміна</string>
+    <string name="saved">Збережено</string>
+    <string name="cleared">Дані очищено</string>
+    <string name="action_settings"/>
+    <string name="ok">Гаразд</string>
+    <string name="cancelL">Скасувати</string>
+    <string name="clear">Весь журнал перегляду буде спорожнено</string>
+    <string name="clear_data">Спорожнити дані</string>
+
+</resources>
