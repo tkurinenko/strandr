@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog">Диалог</string>
+    <string name="app_name">P0661_AlertDialogOperations</string>
+    <string name="action_settings"/>
+</resources>
