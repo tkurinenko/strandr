@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,6 +81,8 @@ public void onclick(View v){
 
     void method1(){
         removeDialog(DIALOG);
+        Toast toast = new Toast(this);
+        toast.show();
     }
     void method2(){
         showDialog(DIALOG);
